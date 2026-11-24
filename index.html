@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thillai Vignesh — Aspiring Software Engineer</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    /** @type {import('tailwindcss').Config} */
+    globalThis.tailwind = globalThis.tailwind || {};
+    globalThis.tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'accent': '#DC2626',
+            'accent-hover': '#EF4444',
+            'accent-text': '#F87171',
+            'light-primary': '#B70011',
+            'light-on-primary': '#FFFFFF',
+            'light-primary-container': '#DC2626',
+            'light-on-primary-container': '#FFFFFF',
+            'light-secondary': '#374151',
+            'light-on-secondary': '#FFFFFF',
+            'light-surface': '#F9FAFB',
+            'light-surface-container-low': '#F3F4F6',
+            'light-surface-container': '#E5E7EB',
+            'light-surface-container-high': '#D1D5DB',
+            'light-on-surface': '#111827',
+            'light-on-surface-variant': '#4B5563',
+            'light-outline': '#9CA3AF',
+            'light-outline-variant': '#D1D5DB',
+            'dark-primary': '#DC2626',
+            'dark-on-primary': '#FFFFFF',
+            'dark-primary-container': '#991B1B',
+            'dark-on-primary-container': '#FEE2E2',
+            'dark-secondary': '#1F2937',
+            'dark-on-secondary': '#F3F4F6',
+            'dark-surface': '#07070A',
+            'dark-surface-container-low': '#0E0F14',
+            'dark-surface-container': '#161820',
+            'dark-surface-container-high': '#1E202B',
+            'dark-on-surface': '#F3F4F6',
+            'dark-on-surface-variant': '#9CA3AF',
+            'dark-outline': '#4B5563',
+            'dark-outline-variant': '#262936',
+          },
+          borderRadius: {
+            'sm': '4px',
+            'DEFAULT': '8px',
+            'md': '12px',
+            'lg': '16px',
+            'xl': '24px',
+            'full': '9999px',
+          },
+          spacing: {
+            'gutter-xs': '4px',
+            'gutter-sm': '8px',
+            'gutter-md': '16px',
+            'gutter-lg': '24px',
+            'gutter-xl': '32px',
+            'section-sm': '48px',
+            'section-lg': '80px',
+            'page-margin': '24px',
+          },
+          fontFamily: {
+            'display': ['"Mulish"', 'sans-serif'],
+            'headline': ['"Mulish"', 'sans-serif'],
+            'title': ['"Instrument Sans"', 'sans-serif'],
+            'body': ['"Instrument Sans"', 'sans-serif'],
+            'label': ['"Instrument Sans"', 'sans-serif'],
+            'mono': ['"Source Code Pro"', 'monospace'],
+          },
+          fontSize: {
+            'display-xl': ['64px', { lineHeight: '68px', letterSpacing: '-1.5px', fontWeight: '800' }],
+            'display-xl-mobile': ['32px', { lineHeight: '36px', letterSpacing: '-0.75px', fontWeight: '800' }],
+            'display-lg': ['48px', { lineHeight: '54px', letterSpacing: '-1px', fontWeight: '700' }],
+            'display-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+            'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.5px', fontWeight: '700' }],
+            'headline-lg-mobile': ['24px', { lineHeight: '30px', letterSpacing: '-0.25px', fontWeight: '700' }],
+            'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.25px', fontWeight: '700' }],
+            'title-lg': ['20px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '600' }],
+            'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '600' }],
+            'body-lg': ['18px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '400' }],
+            'body-md': ['15px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+            'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0.25px', fontWeight: '600' }],
+            'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.75px', fontWeight: '500' }],
+            'mono-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+          },
+          transitionDuration: {
+            'state-change': '150ms',
+            'surface-enter': '280ms',
+          },
+          transitionDelay: {
+            'state-change': '0ms',
+            'surface-enter': '0ms',
+          },
+          transitionTimingFunction: {
+            'state-change': 'ease-out',
+            'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+          },
+        },
+      },
+    };
+    if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Mulish:wght@600;700;800&amp;family=Source+Code+Pro:wght@500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-dark-surface text-dark-on-surface font-body antialiased selection:bg-dark-primary selection:text-dark-on-primary">
+  <div class="min-h-screen flex flex-col">
+
+    <!-- Sticky Header -->
+    <header class="sticky top-0 z-40 bg-dark-surface/90 backdrop-blur-md border-b border-dark-outline-variant">
+      <div class="max-w-6xl mx-auto px-gutter-md md:px-gutter-xl h-20 flex items-center justify-between gap-gutter-lg">
+        <a href="#top" class="font-display text-title-lg tracking-tight text-dark-on-surface flex items-center gap-gutter-xs shrink-0">
+          <span>THILLAI</span><span class="text-accent-text">.</span>
+        </a>
+
+        <nav aria-label="Primary navigation" class="hidden md:flex items-center gap-gutter-xl">
+          <a href="#projects" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-dark-on-surface uppercase transition-colors duration-state-change">Projects</a>
+          <a href="#about" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-dark-on-surface uppercase transition-colors duration-state-change">About</a>
+          <a href="#skills" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-dark-on-surface uppercase transition-colors duration-state-change">Skills</a>
+          <a href="#achievements" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-dark-on-surface uppercase transition-colors duration-state-change">Achievements</a>
+          <a href="#contact" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-dark-on-surface uppercase transition-colors duration-state-change">Contact</a>
+          <a href="admin.html" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-accent-text uppercase transition-colors duration-state-change flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">lock</span>Admin</a>
+        </nav>
+
+        <a href="#contact" class="inline-flex items-center justify-center gap-gutter-sm bg-dark-primary hover:bg-accent-hover text-dark-on-primary font-label text-label-lg px-gutter-lg py-2.5 rounded transition-colors duration-state-change ease-state-change focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent whitespace-nowrap shrink-0">
+          <span>Let's Talk</span>
+        </a>
+      </div>
+    </header>
+
+    <main id="top" class="flex-1">
+
+      <!-- Hero Section -->
+      <section class="max-w-6xl mx-auto px-gutter-md md:px-gutter-xl pt-section-sm md:pt-section-lg pb-section-sm md:pb-section-lg border-b border-dark-outline-variant">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl items-end">
+          <div class="md:col-span-8 flex flex-col gap-gutter-lg min-w-0">
+            <div class="inline-flex items-center gap-gutter-sm">
+              <span class="w-2 h-2 rounded-full bg-accent shrink-0 animate-pulse"></span>
+              <span class="font-mono text-label-sm text-dark-on-surface-variant uppercase tracking-wider">
+                B.E. Computer Science Engineering • 2029 Graduate • Chennai
+              </span>
+            </div>
+
+            <div class="flex flex-col gap-gutter-md">
+              <h1 class="font-display text-display-xl-mobile md:text-display-xl text-dark-on-surface text-balance uppercase tracking-tight">
+                Thillai Vignesh
+              </h1>
+              <p class="font-headline text-headline-md text-accent-text">
+                Aspiring Software Engineer
+              </p>
+            </div>
+
+            <p class="font-body text-body-lg text-dark-on-surface max-w-prose text-pretty">
+              Turning Ideas Into Intelligent Solutions. Computer Science Engineering student passionate about software development, problem-solving, and building impactful technology across Java, DSA, full-stack development, and AI-driven systems.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-gutter-md pt-gutter-sm">
+              <a href="#projects" class="inline-flex items-center justify-center gap-gutter-sm bg-dark-primary hover:bg-accent-hover text-dark-on-primary font-label text-label-lg px-gutter-lg py-3 rounded transition-colors duration-state-change ease-state-change focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent whitespace-nowrap shadow-lg shadow-accent/20">
+                <span>Explore My Work</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_downward</span>
+              </a>
+
+              <a href="#contact" class="inline-flex items-center justify-center gap-gutter-sm bg-dark-surface-container hover:bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant font-label text-label-lg px-gutter-lg py-3 rounded transition-colors duration-state-change ease-state-change focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent whitespace-nowrap">
+                <span>Get in Touch</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Portrait & Core Stack Summary -->
+          <div class="md:col-span-4 min-w-0 flex flex-col gap-gutter-md">
+            <div class="relative bg-dark-surface-container border border-dark-outline-variant rounded-md overflow-hidden group">
+              <img src="profile.jpg" alt="Thillai Vignesh — Aspiring Software Engineer" class="w-full aspect-square object-cover object-top transition-transform duration-500 group-hover:scale-105">
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-dark-surface-container via-dark-surface-container/60 to-transparent"></div>
+            </div>
+            <aside class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-md">
+              <span class="font-mono text-label-sm text-accent-text uppercase tracking-wider">Core Focus</span>
+              <p class="font-mono text-mono-md text-dark-on-surface leading-relaxed">
+                Java · Python · C++ · DSA · Full-Stack Development
+              </p>
+              <div class="pt-gutter-md border-t border-dark-outline-variant flex items-center justify-between gap-gutter-sm">
+                <span class="font-mono text-label-sm text-dark-on-surface-variant">STATUS</span>
+                <span class="font-mono text-label-sm text-accent-text text-right flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                  Open to Opportunities
+                </span>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <!-- Metrics Strip -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg mt-section-sm pt-gutter-xl border-t border-dark-outline-variant">
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-display text-display-lg-mobile md:text-display-lg text-dark-on-surface tabular-nums">9.52</span>
+            <span class="font-mono text-label-sm text-dark-on-surface-variant uppercase">First-Year CGPA</span>
+          </div>
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-display text-display-lg-mobile md:text-display-lg text-dark-on-surface tabular-nums">87% &amp; 82%</span>
+            <span class="font-mono text-label-sm text-dark-on-surface-variant uppercase">NPTEL Elite + Silver</span>
+          </div>
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-display text-display-lg-mobile md:text-display-lg text-dark-on-surface tabular-nums">100+ Days</span>
+            <span class="font-mono text-label-sm text-dark-on-surface-variant uppercase">SQL &amp; LeetCode Challenges</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Projects Section -->
+      <section id="projects" class="max-w-6xl mx-auto px-gutter-md md:px-gutter-xl py-section-sm md:py-section-lg border-b border-dark-outline-variant">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-gutter-lg mb-section-sm">
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-mono text-label-sm text-accent-text uppercase">Featured Works</span>
+            <h2 class="font-headline text-headline-lg-mobile md:text-headline-lg text-dark-on-surface uppercase">Projects.</h2>
+          </div>
+          <p class="font-body text-body-md text-dark-on-surface-variant max-w-md md:text-right min-w-0">
+            Practical software systems spanning offline-first sustainability platforms, personal productivity OS, and EV demand forecasting.
+          </p>
+        </div>
+
+        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg items-stretch">
+          <!-- Project 1 -->
+          <article class="h-full bg-dark-surface-container hover:bg-dark-surface-container-high border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-colors duration-state-change ease-state-change min-w-0 hover:border-accent/40">
+            <div class="flex flex-col gap-gutter-md">
+              <header class="flex items-center justify-between gap-gutter-sm">
+                <span class="font-mono text-label-sm text-accent-text uppercase">Sustainability</span>
+                <span class="material-symbols-outlined text-dark-on-surface-variant text-[20px]" aria-hidden="true">recycling</span>
+              </header>
+              <div class="flex flex-col gap-gutter-sm">
+                <h3 class="font-headline text-title-lg text-dark-on-surface">ReLoop – E-Waste Platform</h3>
+                <p class="font-body text-body-md text-dark-on-surface-variant text-pretty">
+                  An offline-first e-waste management platform designed to improve collection, tracking, and Extended Producer Responsibility (EPR) verification.
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-gutter-xs pt-gutter-xs">
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">Flutter</span>
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">React / Next.js</span>
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">FastAPI</span>
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">Supabase</span>
+              </div>
+            </div>
+            <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-dark-outline-variant">
+              <span class="font-mono text-label-sm text-dark-on-surface-variant">Dart · SQLite</span>
+              <a href="#contact" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-accent-text hover:text-dark-on-surface transition-colors duration-state-change whitespace-nowrap">
+                <span>Inquire</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_outward</span>
+              </a>
+            </footer>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="h-full bg-dark-surface-container hover:bg-dark-surface-container-high border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-colors duration-state-change ease-state-change min-w-0 hover:border-accent/40">
+            <div class="flex flex-col gap-gutter-md">
+              <header class="flex items-center justify-between gap-gutter-sm">
+                <span class="font-mono text-label-sm text-accent-text uppercase">Productivity</span>
+                <span class="material-symbols-outlined text-dark-on-surface-variant text-[20px]" aria-hidden="true">dashboard</span>
+              </header>
+              <div class="flex flex-col gap-gutter-sm">
+                <h3 class="font-headline text-title-lg text-dark-on-surface">Personal Life OS</h3>
+                <p class="font-body text-body-md text-dark-on-surface-variant text-pretty">
+                  A personal productivity and academic management platform integrating academic tracking, document management, coding practice, and cloud backup.
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-gutter-xs pt-gutter-xs">
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">React</span>
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">Vite</span>
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">Tailwind CSS</span>
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">FastAPI</span>
+              </div>
+            </div>
+            <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-dark-outline-variant">
+              <span class="font-mono text-label-sm text-dark-on-surface-variant">Cloud Backup</span>
+              <a href="#contact" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-accent-text hover:text-dark-on-surface transition-colors duration-state-change whitespace-nowrap">
+                <span>Inquire</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_outward</span>
+              </a>
+            </footer>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="h-full bg-dark-surface-container hover:bg-dark-surface-container-high border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-colors duration-state-change ease-state-change min-w-0 hover:border-accent/40">
+            <div class="flex flex-col gap-gutter-md">
+              <header class="flex items-center justify-between gap-gutter-sm">
+                <span class="font-mono text-label-sm text-accent-text uppercase">Data &amp; Backend</span>
+                <span class="material-symbols-outlined text-dark-on-surface-variant text-[20px]" aria-hidden="true">ev_station</span>
+              </header>
+              <div class="flex flex-col gap-gutter-sm">
+                <h3 class="font-headline text-title-lg text-dark-on-surface">EV Demand Predictor</h3>
+                <p class="font-body text-body-md text-dark-on-surface-variant text-pretty">
+                  A software project focused on predicting electric vehicle charging demand using data-driven approaches and scalable backend services.
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-gutter-xs pt-gutter-xs">
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">Java</span>
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">Spring Boot</span>
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">MySQL</span>
+                <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">Python</span>
+              </div>
+            </div>
+            <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-dark-outline-variant">
+              <span class="font-mono text-label-sm text-dark-on-surface-variant">Forecasting</span>
+              <a href="#contact" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-accent-text hover:text-dark-on-surface transition-colors duration-state-change whitespace-nowrap">
+                <span>Inquire</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_outward</span>
+              </a>
+            </footer>
+          </article>
+        </div>
+      </section>
+
+      <!-- About & Areas of Expertise -->
+      <section id="about" class="max-w-6xl mx-auto px-gutter-md md:px-gutter-xl py-section-sm md:py-section-lg border-b border-dark-outline-variant">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl">
+          <div class="md:col-span-5 flex flex-col gap-gutter-md min-w-0">
+            <span class="font-mono text-label-sm text-accent-text uppercase">Engineer · Problem Solver · Builder</span>
+            <h2 class="font-headline text-headline-lg-mobile md:text-headline-lg text-dark-on-surface uppercase">About Me.</h2>
+            <p class="font-body text-body-lg text-dark-on-surface-variant text-pretty">
+              I'm a Computer Science Engineering student (Class of 2029) in Chennai, Tamil Nadu, focused on turning ideas into clean, reliable software.
+            </p>
+            <p class="font-body text-body-md text-dark-on-surface-variant text-pretty">
+              From algorithmic problem-solving in Java and C++ to full-stack web apps with React, FastAPI, and Spring Boot, I build practical tools and explore AI-driven solutions.
+            </p>
+          </div>
+
+          <div class="md:col-span-7 flex flex-col gap-gutter-lg min-w-0">
+            <div class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-md">
+              <span class="font-mono text-label-sm text-accent-text uppercase">Areas of Expertise</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter-md">
+                <div class="flex items-center gap-gutter-sm">
+                  <span class="material-symbols-outlined text-accent-text text-[18px]" aria-hidden="true">web</span>
+                  <span class="font-body text-title-md text-dark-on-surface">Frontend Development</span>
+                </div>
+                <div class="flex items-center gap-gutter-sm">
+                  <span class="material-symbols-outlined text-accent-text text-[18px]" aria-hidden="true">dns</span>
+                  <span class="font-body text-title-md text-dark-on-surface">Backend Development</span>
+                </div>
+                <div class="flex items-center gap-gutter-sm">
+                  <span class="material-symbols-outlined text-accent-text text-[18px]" aria-hidden="true">storage</span>
+                  <span class="font-body text-title-md text-dark-on-surface">Database Integration</span>
+                </div>
+                <div class="flex items-center gap-gutter-sm">
+                  <span class="material-symbols-outlined text-accent-text text-[18px]" aria-hidden="true">psychology</span>
+                  <span class="font-body text-title-md text-dark-on-surface">Problem Solving</span>
+                </div>
+                <div class="flex items-center gap-gutter-sm">
+                  <span class="material-symbols-outlined text-accent-text text-[18px]" aria-hidden="true">account_tree</span>
+                  <span class="font-body text-title-md text-dark-on-surface">Algorithm Design</span>
+                </div>
+                <div class="flex items-center gap-gutter-sm">
+                  <span class="material-symbols-outlined text-accent-text text-[18px]" aria-hidden="true">build</span>
+                  <span class="font-body text-title-md text-dark-on-surface">Practical Software</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="education-card" class="bg-dark-surface-container-low border border-dark-outline-variant rounded-md p-gutter-lg flex flex-wrap items-center justify-between gap-gutter-md">
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-mono text-label-sm text-dark-on-surface-variant uppercase">Education • Easwari Engineering College, Chennai</span>
+                <span class="font-body text-title-md text-dark-on-surface">B.E. Computer Science Engineering</span>
+              </div>
+              <span class="font-mono text-mono-md text-accent-text tabular-nums">2029 Graduate</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technical Skills Section -->
+      <section id="skills" class="max-w-6xl mx-auto px-gutter-md md:px-gutter-xl py-section-sm md:py-section-lg border-b border-dark-outline-variant">
+        <div class="flex flex-col gap-gutter-xs mb-section-sm">
+          <span class="font-mono text-label-sm text-accent-text uppercase">What I Work With</span>
+          <h2 class="font-headline text-headline-lg-mobile md:text-headline-lg text-dark-on-surface uppercase">Technical Skills.</h2>
+        </div>
+
+        <div id="skills-grid" class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
+          <!-- Programming Languages -->
+          <article class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-md min-w-0">
+            <header class="flex items-center justify-between gap-gutter-sm">
+              <h3 class="font-headline text-title-lg text-dark-on-surface min-w-0">Programming Languages</h3>
+              <span class="material-symbols-outlined text-accent-text text-[20px] shrink-0" aria-hidden="true">code</span>
+            </header>
+            <div class="flex flex-wrap gap-gutter-sm">
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">Java</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">Python</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">C++</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">C</span>
+            </div>
+          </article>
+
+          <!-- Web Development -->
+          <article class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-md min-w-0">
+            <header class="flex items-center justify-between gap-gutter-sm">
+              <h3 class="font-headline text-title-lg text-dark-on-surface min-w-0">Web Development</h3>
+              <span class="material-symbols-outlined text-accent-text text-[20px] shrink-0" aria-hidden="true">language</span>
+            </header>
+            <div class="flex flex-wrap gap-gutter-sm">
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">HTML &amp; CSS</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">JavaScript</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">React.js</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">Tailwind CSS</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">FastAPI</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">Spring Boot</span>
+            </div>
+          </article>
+
+          <!-- Database & Tools -->
+          <article class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-md min-w-0">
+            <header class="flex items-center justify-between gap-gutter-sm">
+              <h3 class="font-headline text-title-lg text-dark-on-surface min-w-0">Database &amp; Tools</h3>
+              <span class="material-symbols-outlined text-accent-text text-[20px] shrink-0" aria-hidden="true">terminal</span>
+            </header>
+            <div class="flex flex-wrap gap-gutter-sm">
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">MySQL</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">Git &amp; GitHub</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">IntelliJ IDEA</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">Jupyter Notebook</span>
+            </div>
+          </article>
+
+          <!-- Core CS & Interests -->
+          <article class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-md min-w-0">
+            <header class="flex items-center justify-between gap-gutter-sm">
+              <h3 class="font-headline text-title-lg text-dark-on-surface min-w-0">Core CS &amp; Interests</h3>
+              <span class="material-symbols-outlined text-accent-text text-[20px] shrink-0" aria-hidden="true">memory</span>
+            </header>
+            <div class="flex flex-wrap gap-gutter-sm">
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">DSA</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">OOP</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">DBMS</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">Computer Networks</span>
+              <span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant px-3 py-1.5 rounded-full">OS</span>
+              <span class="font-mono text-mono-md bg-dark-primary-container text-dark-on-primary-container border border-accent px-3 py-1.5 rounded-full font-medium">AI &amp; ML</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Achievements Section -->
+      <section id="achievements" class="max-w-6xl mx-auto px-gutter-md md:px-gutter-xl py-section-sm md:py-section-lg border-b border-dark-outline-variant">
+        <div class="flex flex-col gap-gutter-xs mb-section-sm">
+          <span class="font-mono text-label-sm text-accent-text uppercase">Milestones &amp; Credentials</span>
+          <h2 class="font-headline text-headline-lg-mobile md:text-headline-lg text-dark-on-surface uppercase">Achievements.</h2>
+        </div>
+
+        <div id="achievements-grid" class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg">
+          <div class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-sm hover:border-accent/40 transition-colors">
+            <span class="font-mono text-label-sm text-accent-text uppercase tabular-nums">Elite + Silver · 82%</span>
+            <h3 class="font-body text-title-md text-dark-on-surface">NPTEL Joy of Computing using Python</h3>
+            <p class="font-body text-body-md text-dark-on-surface-variant">Certified with Elite + Silver distinction in Python programming and computational thinking.</p>
+          </div>
+
+          <div class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-sm hover:border-accent/40 transition-colors">
+            <span class="font-mono text-label-sm text-accent-text uppercase tabular-nums">Elite + Silver · 87%</span>
+            <h3 class="font-body text-title-md text-dark-on-surface">NPTEL Internet of Things</h3>
+            <p class="font-body text-body-md text-dark-on-surface-variant">Certified with Elite + Silver distinction in IoT architecture, sensors, and connected systems.</p>
+          </div>
+
+          <div class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-sm hover:border-accent/40 transition-colors">
+            <span class="font-mono text-label-sm text-accent-text uppercase tabular-nums">30 Days · 100 Days</span>
+            <h3 class="font-body text-title-md text-dark-on-surface">30 Days LeetCode &amp; SQL 100 Days Challenges</h3>
+            <p class="font-body text-body-md text-dark-on-surface-variant">Completed the 30 Days LeetCode Challenge and SQL 100 Days Challenge for consistent problem-solving.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact" class="max-w-6xl mx-auto px-gutter-md md:px-gutter-xl py-section-sm md:py-section-lg">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl">
+          <div class="md:col-span-5 flex flex-col gap-gutter-lg min-w-0">
+            <div class="flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-accent-text uppercase">Get in Touch</span>
+              <h2 class="font-headline text-headline-lg-mobile md:text-headline-lg text-dark-on-surface uppercase">Let's Connect.</h2>
+            </div>
+
+            <p class="font-body text-body-md text-dark-on-surface-variant text-pretty">
+              I'm always interested in exploring internship opportunities, collaborating on innovative projects, participating in hackathons, and connecting with fellow developers. Feel free to reach out!
+            </p>
+
+            <div class="flex flex-col gap-gutter-sm">
+              <a href="mailto:sthillaivigneshs@gmail.com" class="bg-dark-surface-container hover:bg-dark-surface-container-high border border-dark-outline-variant rounded-md p-gutter-md flex items-center justify-between gap-gutter-md transition-colors duration-state-change group">
+                <div class="flex items-center gap-gutter-md min-w-0">
+                  <span class="material-symbols-outlined text-accent-text text-[20px] shrink-0" aria-hidden="true">mail</span>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-mono text-label-sm text-dark-on-surface-variant uppercase">Email</span>
+                    <span class="font-body text-title-md text-dark-on-surface truncate group-hover:text-accent-text transition-colors">sthillaivigneshs@gmail.com</span>
+                  </div>
+                </div>
+                <span class="material-symbols-outlined text-dark-on-surface-variant text-[18px] shrink-0" aria-hidden="true">arrow_outward</span>
+              </a>
+
+              <div class="grid grid-cols-3 gap-gutter-sm">
+                <a href="https://github.com/sthillaivigneshs" target="_blank" rel="noopener noreferrer" class="bg-dark-surface-container hover:bg-dark-surface-container-high border border-dark-outline-variant rounded-md p-gutter-md flex items-center justify-between transition-colors duration-state-change group">
+                  <span class="font-label text-label-lg text-dark-on-surface group-hover:text-accent-text transition-colors">GitHub</span>
+                  <span class="material-symbols-outlined text-dark-on-surface-variant text-[16px]" aria-hidden="true">arrow_outward</span>
+                </a>
+                <a href="https://www.linkedin.com/in/thillai-vignesh-s-685a65379/" target="_blank" rel="noopener noreferrer" class="bg-dark-surface-container hover:bg-dark-surface-container-high border border-dark-outline-variant rounded-md p-gutter-md flex items-center justify-between transition-colors duration-state-change group">
+                  <span class="font-label text-label-lg text-dark-on-surface group-hover:text-accent-text transition-colors">LinkedIn</span>
+                  <span class="material-symbols-outlined text-dark-on-surface-variant text-[16px]" aria-hidden="true">arrow_outward</span>
+                </a>
+                <a href="https://leetcode.com/u/thillai1911/" target="_blank" rel="noopener noreferrer" class="bg-dark-surface-container hover:bg-dark-surface-container-high border border-dark-outline-variant rounded-md p-gutter-md flex items-center justify-between transition-colors duration-state-change group">
+                  <span class="font-label text-label-lg text-dark-on-surface group-hover:text-accent-text transition-colors">LeetCode</span>
+                  <span class="material-symbols-outlined text-dark-on-surface-variant text-[16px]" aria-hidden="true">arrow_outward</span>
+                </a>
+              </div>
+
+              <div class="flex items-center gap-gutter-sm pt-gutter-xs text-dark-on-surface-variant">
+                <span class="material-symbols-outlined text-[18px] text-accent-text" aria-hidden="true">location_on</span>
+                <span class="font-mono text-mono-md">Chennai, Tamil Nadu, India</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="md:col-span-7 min-w-0">
+            <form id="contact-form" action="https://formspree.io/f/xvkadwvk" method="POST" novalidate class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg md:p-gutter-xl flex flex-col gap-gutter-lg">
+              <div class="flex flex-wrap items-center justify-between gap-gutter-sm">
+                <span class="font-mono text-label-sm text-accent-text uppercase">Direct Inquiry</span>
+                <span class="font-mono text-label-sm text-dark-on-surface-variant">OPEN TO COLLABORATION</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter-md">
+                <!-- Full Name -->
+                <div class="flex flex-col gap-gutter-xs">
+                  <label for="name" class="font-mono text-label-sm text-dark-on-surface-variant uppercase">Full Name <span class="text-accent-text">*</span></label>
+                  <input type="text" id="name" name="name" required placeholder="Alex Morgan" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent text-dark-on-surface placeholder-dark-outline font-body text-body-md px-gutter-md py-3 rounded transition-colors duration-state-change">
+                  <span id="name-error" class="hidden font-mono text-xs text-accent-text pt-0.5"></span>
+                </div>
+
+                <!-- Email Address -->
+                <div class="flex flex-col gap-gutter-xs">
+                  <label for="email" class="font-mono text-label-sm text-dark-on-surface-variant uppercase">Email Address <span class="text-accent-text">*</span></label>
+                  <input type="email" id="email" name="email" required placeholder="alex@company.com" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent text-dark-on-surface placeholder-dark-outline font-body text-body-md px-gutter-md py-3 rounded transition-colors duration-state-change">
+                  <span id="email-error" class="hidden font-mono text-xs text-accent-text pt-0.5"></span>
+                </div>
+              </div>
+
+              <!-- Subject -->
+              <div class="flex flex-col gap-gutter-xs">
+                <label for="subject" class="font-mono text-label-sm text-dark-on-surface-variant uppercase">Subject <span class="text-accent-text">*</span></label>
+                <input type="text" id="subject" name="subject" required placeholder="e.g. Internship Opportunity / Project Collaboration" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent text-dark-on-surface placeholder-dark-outline font-body text-body-md px-gutter-md py-3 rounded transition-colors duration-state-change">
+                <span id="subject-error" class="hidden font-mono text-xs text-accent-text pt-0.5"></span>
+              </div>
+
+              <!-- Message -->
+              <div class="flex flex-col gap-gutter-xs">
+                <label for="message" class="font-mono text-label-sm text-dark-on-surface-variant uppercase">Message <span class="text-accent-text">*</span></label>
+                <textarea id="message" name="message" rows="4" required placeholder="Details regarding your role, timeline, or idea..." class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent text-dark-on-surface placeholder-dark-outline font-body text-body-md px-gutter-md py-3 rounded transition-colors duration-state-change"></textarea>
+                <span id="message-error" class="hidden font-mono text-xs text-accent-text pt-0.5"></span>
+              </div>
+
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md pt-gutter-xs">
+                <div id="form-status" role="status" aria-live="polite" class="font-body text-body-md min-h-[28px] flex items-center gap-2"></div>
+                <button type="submit" id="submit-btn" class="inline-flex items-center justify-center gap-gutter-sm bg-dark-primary hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-dark-on-primary font-label text-label-lg px-gutter-lg py-3 rounded transition-colors duration-state-change ease-state-change focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent whitespace-nowrap shadow-lg shadow-accent/20 cursor-pointer">
+                  <span id="btn-text">Send Message</span>
+                  <span id="btn-icon" class="material-symbols-outlined text-[18px]" aria-hidden="true">send</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-dark-outline-variant bg-dark-surface-container-low">
+      <div class="max-w-6xl mx-auto px-gutter-md md:px-gutter-xl py-gutter-xl flex flex-col md:flex-row items-center justify-between gap-gutter-lg">
+        <div class="flex items-center gap-gutter-md">
+          <span class="font-display text-title-lg text-dark-on-surface">THILLAI<span class="text-accent-text">.</span></span>
+          <span class="font-mono text-label-sm text-dark-on-surface-variant uppercase">Aspiring Software Engineer</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-gutter-lg">
+          <a href="#projects" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-dark-on-surface uppercase">Projects</a>
+          <a href="#about" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-dark-on-surface uppercase">About</a>
+          <a href="#skills" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-dark-on-surface uppercase">Skills</a>
+          <a href="#achievements" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-dark-on-surface uppercase">Achievements</a>
+          <a href="#contact" class="font-mono text-label-sm text-dark-on-surface-variant hover:text-dark-on-surface uppercase">Contact</a>
+        </div>
+        <span class="font-mono text-label-sm text-dark-on-surface-variant">© 2026 THILLAI VIGNESH</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // ============================================================================
+    // CONFIGURATION: FORM SUBMISSION ENDPOINT (FORMSPREE / EMAIL DELIVERY SERVICE)
+    // ============================================================================
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvkadwvk';
+
+    (function () {
+      const form = document.getElementById('contact-form');
+      if (!form) return;
+
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
+      const subjectInput = document.getElementById('subject');
+      const messageInput = document.getElementById('message');
+
+      const nameError = document.getElementById('name-error');
+      const emailError = document.getElementById('email-error');
+      const subjectError = document.getElementById('subject-error');
+      const messageError = document.getElementById('message-error');
+
+      const statusEl = document.getElementById('form-status');
+      const submitBtn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnIcon = document.getElementById('btn-icon');
+
+      let isSubmitting = false;
+
+      // Validate email address format (RFC 5322 compatible check)
+      function isValidEmail(email) {
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+        return emailRegex.test(email.trim());
+      }
+
+      // Set visual error on field
+      function setFieldError(input, errorEl, message) {
+        input.classList.remove('border-dark-outline-variant');
+        input.classList.add('border-accent');
+        errorEl.textContent = message;
+        errorEl.classList.remove('hidden');
+      }
+
+      // Clear visual error on field
+      function clearFieldError(input, errorEl) {
+        input.classList.remove('border-accent');
+        input.classList.add('border-dark-outline-variant');
+        errorEl.textContent = '';
+        errorEl.classList.add('hidden');
+      }
+
+      // Real-time error clearing when user edits input
+      const fields = [
+        { input: nameInput, error: nameError },
+        { input: emailInput, error: emailError },
+        { input: subjectInput, error: subjectError },
+        { input: messageInput, error: messageError }
+      ];
+
+      fields.forEach(({ input, error }) => {
+        if (input) {
+          input.addEventListener('input', () => {
+            clearFieldError(input, error);
+            if (statusEl.dataset.type === 'error') {
+              statusEl.innerHTML = '';
+              delete statusEl.dataset.type;
+            }
+          });
+        }
+      });
+
+      // Form validation
+      function validateForm() {
+        let isValid = true;
+        let firstInvalidInput = null;
+
+        // Full Name validation
+        const nameVal = nameInput.value.trim();
+        if (!nameVal) {
+          setFieldError(nameInput, nameError, 'Full name is required.');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = nameInput;
+        } else if (nameVal.length < 2) {
+          setFieldError(nameInput, nameError, 'Name must be at least 2 characters.');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = nameInput;
+        } else {
+          clearFieldError(nameInput, nameError);
+        }
+
+        // Email Address validation
+        const emailVal = emailInput.value.trim();
+        if (!emailVal) {
+          setFieldError(emailInput, emailError, 'Email address is required.');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = emailInput;
+        } else if (!isValidEmail(emailVal)) {
+          setFieldError(emailInput, emailError, 'Please enter a valid email address (e.g. alex@company.com).');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = emailInput;
+        } else {
+          clearFieldError(emailInput, emailError);
+        }
+
+        // Subject validation
+        const subjectVal = subjectInput.value.trim();
+        if (!subjectVal) {
+          setFieldError(subjectInput, subjectError, 'Subject is required.');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = subjectInput;
+        } else if (subjectVal.length < 3) {
+          setFieldError(subjectInput, subjectError, 'Subject must be at least 3 characters.');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = subjectInput;
+        } else {
+          clearFieldError(subjectInput, subjectError);
+        }
+
+        // Message validation
+        const messageVal = messageInput.value.trim();
+        if (!messageVal) {
+          setFieldError(messageInput, messageError, 'Message is required.');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = messageInput;
+        } else if (messageVal.length < 10) {
+          setFieldError(messageInput, messageError, 'Message must be at least 10 characters.');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = messageInput;
+        } else {
+          clearFieldError(messageInput, messageError);
+        }
+
+        if (firstInvalidInput) {
+          firstInvalidInput.focus();
+        }
+
+        return isValid;
+      }
+
+      // UI loading state toggle
+      function setLoading(loading) {
+        isSubmitting = loading;
+        submitBtn.disabled = loading;
+        if (loading) {
+          btnText.textContent = 'Sending...';
+          btnIcon.textContent = 'sync';
+          btnIcon.classList.add('animate-spin');
+          statusEl.className = 'font-body text-body-md text-dark-on-surface-variant flex items-center gap-2';
+          statusEl.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin text-accent-text" aria-hidden="true">sync</span> Submitting your inquiry...';
+        } else {
+          btnText.textContent = 'Send Message';
+          btnIcon.textContent = 'send';
+          btnIcon.classList.remove('animate-spin');
+        }
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        // Prevent duplicate submissions
+        if (isSubmitting) return;
+
+        // Perform client-side validation
+        if (!validateForm()) {
+          statusEl.className = 'font-body text-body-md text-accent-text flex items-center gap-2';
+          statusEl.dataset.type = 'error';
+          statusEl.innerHTML = '<span class="material-symbols-outlined text-[18px]" aria-hidden="true">error</span> Please correct the highlighted fields above.';
+          return;
+        }
+
+        // Check endpoint configuration placeholder
+        if (!FORMSPREE_ENDPOINT || FORMSPREE_ENDPOINT === 'YOUR_FORMSPREE_ENDPOINT_HERE' || FORMSPREE_ENDPOINT.includes('YOUR_')) {
+          statusEl.className = 'font-body text-body-md text-amber-400 flex items-center gap-2';
+          statusEl.dataset.type = 'error';
+          statusEl.innerHTML = '<span class="material-symbols-outlined text-[18px]" aria-hidden="true">warning</span> Form endpoint not configured. Please set your Formspree URL in the configuration placeholder.';
+          return;
+        }
+
+        setLoading(true);
+
+        const payload = {
+          name: nameInput.value.trim(),
+          email: emailInput.value.trim(),
+          subject: subjectInput.value.trim(),
+          message: messageInput.value.trim(),
+          _replyto: emailInput.value.trim(),
+          _subject: `New Portfolio Inquiry: ${subjectInput.value.trim()}`
+        };
+
+        try {
+          const response = await fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+
+          const data = await response.json().catch(() => ({}));
+
+          if (response.ok) {
+            // Actual confirmed success
+            statusEl.className = 'font-body text-body-md text-emerald-400 flex items-center gap-2';
+            statusEl.dataset.type = 'success';
+            statusEl.innerHTML = '<span class="material-symbols-outlined text-[18px]" aria-hidden="true">check_circle</span> Message sent successfully! I will get back to you soon.';
+            form.reset();
+            fields.forEach(({ input, error }) => clearFieldError(input, error));
+          } else {
+            // Service returned an error response
+            let errorMessage = 'Failed to deliver message. Please try again or email me directly.';
+            if (data && data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
+              errorMessage = data.errors.map(err => err.message || err.field).join(', ');
+            } else if (data && data.error) {
+              errorMessage = data.error;
+            }
+            statusEl.className = 'font-body text-body-md text-accent-text flex items-center gap-2';
+            statusEl.dataset.type = 'error';
+            statusEl.innerHTML = `<span class="material-symbols-outlined text-[18px]" aria-hidden="true">error</span> ${errorMessage}`;
+          }
+        } catch (err) {
+          // Network or server communication error
+          statusEl.className = 'font-body text-body-md text-accent-text flex items-center gap-2';
+          statusEl.dataset.type = 'error';
+          statusEl.innerHTML = '<span class="material-symbols-outlined text-[18px]" aria-hidden="true">wifi_off</span> Network error occurred. Please check your connection or reach out via email directly.';
+        } finally {
+          setLoading(false);
+        }
+      });
+    })();
+  </script>
+
+  <!-- Dynamic Supabase Content Hydration -->
+  <script type="module">
+    import { SUPABASE_URL, SUPABASE_ANON_KEY } from './supabase-client.js';
+
+    async function hydratePortfolio() {
+      if (!window.supabase) return;
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      try {
+        // Fetch Projects
+        const { data: projects, error: pError } = await client
+          .from('projects')
+          .select('*')
+          .order('display_order', { ascending: true });
+
+        if (!pError && projects && projects.length > 0) {
+          const grid = document.getElementById('projects-grid');
+          if (grid) {
+            grid.innerHTML = projects.map(p => `
+              <article class="h-full bg-dark-surface-container hover:bg-dark-surface-container-high border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-colors duration-state-change ease-state-change min-w-0 hover:border-accent/40">
+                <div class="flex flex-col gap-gutter-md">
+                  <header class="flex items-center justify-between gap-gutter-sm">
+                    <span class="font-mono text-label-sm text-accent-text uppercase">${p.category}</span>
+                    <span class="material-symbols-outlined text-dark-on-surface-variant text-[20px]" aria-hidden="true">${p.icon || 'code'}</span>
+                  </header>
+                  <div class="flex flex-col gap-gutter-sm">
+                    <h3 class="font-headline text-title-lg text-dark-on-surface">${p.title}</h3>
+                    <p class="font-body text-body-md text-dark-on-surface-variant text-pretty">${p.description}</p>
+                  </div>
+                  <div class="flex flex-wrap gap-gutter-xs pt-gutter-xs">
+                    ${(p.tech_stack || []).map(t => `<span class="font-mono text-mono-md bg-dark-surface-container-high text-dark-on-surface px-2.5 py-1 rounded-full border border-dark-outline-variant">${t}</span>`).join('')}
+                  </div>
+                </div>
+                <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-dark-outline-variant">
+                  <span class="font-mono text-label-sm text-dark-on-surface-variant">${p.footer_tag || ''}</span>
+                  <a href="${p.link_url || '#contact'}" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-accent-text hover:text-dark-on-surface transition-colors duration-state-change whitespace-nowrap">
+                    <span>Inquire</span>
+                    <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_outward</span>
+                  </a>
+                </footer>
+              </article>
+            `).join('');
+          }
+        }
+
+        // Fetch Skills
+        const { data: skills, error: sError } = await client
+          .from('skills')
+          .select('*')
+          .order('display_order', { ascending: true });
+
+        if (!sError && skills && skills.length > 0) {
+          const grid = document.getElementById('skills-grid');
+          if (grid) {
+            const categories = {};
+            skills.forEach(s => {
+              if (!categories[s.category]) {
+                categories[s.category] = { icon: s.icon || 'code', items: [] };
+              }
+              categories[s.category].items.push(s);
+            });
+
+            grid.innerHTML = Object.entries(categories).map(([catName, catData]) => `
+              <article class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-md min-w-0">
+                <header class="flex items-center justify-between gap-gutter-sm">
+                  <h3 class="font-headline text-title-lg text-dark-on-surface min-w-0">${catName}</h3>
+                  <span class="material-symbols-outlined text-accent-text text-[20px] shrink-0" aria-hidden="true">${catData.icon}</span>
+                </header>
+                <div class="flex flex-wrap gap-gutter-sm">
+                  ${catData.items.map(s => `
+                    <span class="font-mono text-mono-md ${s.is_highlighted ? 'bg-dark-primary-container text-dark-on-primary-container border border-accent' : 'bg-dark-surface-container-high text-dark-on-surface border border-dark-outline-variant'} px-3 py-1.5 rounded-full ${s.is_highlighted ? 'font-medium' : ''}">${s.name}</span>
+                  `).join('')}
+                </div>
+              </article>
+            `).join('');
+          }
+        }
+
+        // Fetch Education
+        const { data: edu, error: eError } = await client
+          .from('education')
+          .select('*')
+          .order('display_order', { ascending: true })
+          .limit(1);
+
+        if (!eError && edu && edu.length > 0) {
+          const card = document.getElementById('education-card');
+          if (card) {
+            const e = edu[0];
+            card.innerHTML = `
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-mono text-label-sm text-dark-on-surface-variant uppercase">Education • ${e.institution || 'Chennai'}</span>
+                <span class="font-body text-title-md text-dark-on-surface">${e.degree}</span>
+              </div>
+              <span class="font-mono text-mono-md text-accent-text tabular-nums">${e.graduation_year}</span>
+            `;
+          }
+        }
+
+        // Fetch Achievements & Certifications
+        const [{ data: certs }, { data: achs }] = await Promise.all([
+          client.from('certifications').select('*').order('display_order', { ascending: true }),
+          client.from('achievements').select('*').order('display_order', { ascending: true })
+        ]);
+
+        const allMilestones = [
+          ...(certs || []).map(c => ({ badge: c.badge_label, title: c.title, desc: c.description })),
+          ...(achs || []).map(a => ({ badge: a.badge_label, title: a.title, desc: a.description }))
+        ];
+
+        if (allMilestones.length > 0) {
+          const grid = document.getElementById('achievements-grid');
+          if (grid) {
+            grid.innerHTML = allMilestones.map(m => `
+              <div class="bg-dark-surface-container border border-dark-outline-variant rounded-md p-gutter-lg flex flex-col gap-gutter-sm hover:border-accent/40 transition-colors">
+                <span class="font-mono text-label-sm text-accent-text uppercase tabular-nums">${m.badge}</span>
+                <h3 class="font-body text-title-md text-dark-on-surface">${m.title}</h3>
+                <p class="font-body text-body-md text-dark-on-surface-variant">${m.desc}</p>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        // Fallback: retains existing static markup
+        console.warn('Supabase dynamic sync fell back to static content:', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', hydratePortfolio);
+  </script>
+</body>
+</html>

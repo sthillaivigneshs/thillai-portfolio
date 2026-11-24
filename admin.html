@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal — Thillai Vignesh Portfolio</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    globalThis.tailwind = globalThis.tailwind || {};
+    globalThis.tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'accent': '#DC2626',
+            'accent-hover': '#EF4444',
+            'accent-text': '#F87171',
+            'dark-surface': '#07070A',
+            'dark-surface-container-low': '#0E0F14',
+            'dark-surface-container': '#161820',
+            'dark-surface-container-high': '#1E202B',
+            'dark-on-surface': '#F3F4F6',
+            'dark-on-surface-variant': '#9CA3AF',
+            'dark-outline': '#4B5563',
+            'dark-outline-variant': '#262936',
+          },
+          fontFamily: {
+            'display': ['"Mulish"', 'sans-serif'],
+            'body': ['"Instrument Sans"', 'sans-serif'],
+            'mono': ['"Source Code Pro"', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Mulish:wght@600;700;800&family=Source+Code+Pro:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .material-symbols-outlined {
+      display: inline-block; width: 1em; height: 1em; line-height: 1 !important;
+      vertical-align: middle; overflow: hidden;
+    }
+  </style>
+</head>
+<body class="bg-dark-surface text-dark-on-surface font-body antialiased min-h-screen flex flex-col">
+
+  <!-- Top Navigation -->
+  <header class="border-b border-dark-outline-variant bg-dark-surface/90 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="font-display font-bold text-lg tracking-tight text-dark-on-surface flex items-center gap-1">
+          <span>THILLAI</span><span class="text-accent-text">.</span>
+        </a>
+        <span class="font-mono text-xs px-2 py-0.5 rounded bg-accent/20 text-accent-text border border-accent/30 uppercase font-semibold">Admin Portal</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="font-mono text-xs text-dark-on-surface-variant hover:text-dark-on-surface flex items-center gap-1 transition-colors">
+          <span class="material-symbols-outlined text-[16px]">visibility</span>
+          <span>View Site</span>
+        </a>
+        <button id="logout-btn" class="hidden font-mono text-xs text-accent-text hover:text-accent-hover flex items-center gap-1 transition-colors cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]">logout</span>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Login Section -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col justify-center">
+    <div id="login-container" class="max-w-md w-full mx-auto bg-dark-surface-container border border-dark-outline-variant rounded-xl p-8 shadow-2xl">
+      <div class="flex flex-col items-center text-center gap-2 mb-6">
+        <div class="w-12 h-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent-text mb-2">
+          <span class="material-symbols-outlined text-[24px]">shield_person</span>
+        </div>
+        <h1 class="font-display text-2xl font-bold tracking-tight text-dark-on-surface">Administrator Login</h1>
+        <p class="font-body text-sm text-dark-on-surface-variant">Sign in with your authorized admin credentials to manage portfolio content.</p>
+      </div>
+
+      <form id="login-form" class="flex flex-col gap-4">
+        <label class="flex flex-col gap-1.5">
+          <span class="font-mono text-xs text-dark-on-surface-variant uppercase tracking-wider">Admin Email</span>
+          <input type="email" id="login-email" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent text-dark-on-surface px-3.5 py-2.5 rounded text-sm transition-colors">
+        </label>
+
+        <label class="flex flex-col gap-1.5">
+          <span class="font-mono text-xs text-dark-on-surface-variant uppercase tracking-wider">Password</span>
+          <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent text-dark-on-surface px-3.5 py-2.5 rounded text-sm transition-colors">
+        </label>
+
+        <div id="login-status" class="min-h-[20px] text-xs font-mono text-accent-text"></div>
+
+        <button type="submit" id="login-submit-btn" class="w-full bg-dark-primary hover:bg-accent-hover text-white font-semibold py-2.5 px-4 rounded text-sm transition-colors flex items-center justify-center gap-2 shadow-lg shadow-accent/20 cursor-pointer">
+          <span id="login-btn-text">Authenticate</span>
+          <span id="login-btn-icon" class="material-symbols-outlined text-[18px]">lock</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Protected Dashboard Container (hidden by default) -->
+    <div id="dashboard-container" class="hidden flex-col gap-8 w-full">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-dark-outline-variant">
+        <div>
+          <h1 class="font-display text-2xl font-bold text-dark-on-surface">Content Management</h1>
+          <p class="font-body text-sm text-dark-on-surface-variant">Live edits directly sync with your public portfolio database.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="admin-user-badge" class="font-mono text-xs bg-dark-surface-container px-3 py-1.5 rounded border border-dark-outline-variant text-dark-on-surface-variant">Authenticated</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex border-b border-dark-outline-variant gap-2 overflow-x-auto pb-1" id="tabs">
+        <button data-tab="projects" class="tab-btn active px-4 py-2 text-sm font-mono uppercase tracking-wider border-b-2 border-accent text-accent-text cursor-pointer">Projects</button>
+        <button data-tab="skills" class="tab-btn px-4 py-2 text-sm font-mono uppercase tracking-wider border-b-2 border-transparent text-dark-on-surface-variant hover:text-dark-on-surface cursor-pointer">Skills</button>
+        <button data-tab="education" class="tab-btn px-4 py-2 text-sm font-mono uppercase tracking-wider border-b-2 border-transparent text-dark-on-surface-variant hover:text-dark-on-surface cursor-pointer">Education</button>
+        <button data-tab="certifications" class="tab-btn px-4 py-2 text-sm font-mono uppercase tracking-wider border-b-2 border-transparent text-dark-on-surface-variant hover:text-dark-on-surface cursor-pointer">Certifications</button>
+        <button data-tab="achievements" class="tab-btn px-4 py-2 text-sm font-mono uppercase tracking-wider border-b-2 border-transparent text-dark-on-surface-variant hover:text-dark-on-surface cursor-pointer">Achievements</button>
+      </nav>
+
+      <!-- Feedback Banner -->
+      <div id="feedback-message" class="hidden"></div>
+
+      <!-- Tab Content Area -->
+      <div id="tab-content" class="min-h-[400px]">
+        <div class="flex items-center justify-center p-12 text-dark-on-surface-variant gap-2">
+          <span class="material-symbols-outlined animate-spin text-[20px]">sync</span>
+          <span class="font-mono text-sm">Loading records...</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Item Modal -->
+  <div id="item-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-dark-surface-container border border-dark-outline-variant rounded-xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-dark-outline-variant">
+        <h2 id="modal-title" class="font-display font-bold text-lg text-dark-on-surface">Add New Item</h2>
+        <button id="modal-close-btn" class="text-dark-on-surface-variant hover:text-dark-on-surface cursor-pointer">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+      <form id="modal-form" class="flex flex-col gap-4">
+        <div id="modal-fields" class="flex flex-col gap-3"></div>
+        <div id="modal-status" class="min-h-[20px] text-xs font-mono text-accent-text"></div>
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-dark-outline-variant">
+          <button type="button" id="modal-cancel-btn" class="px-4 py-2 text-xs font-mono uppercase text-dark-on-surface-variant hover:text-dark-on-surface cursor-pointer">Cancel</button>
+          <button type="submit" id="modal-save-btn" class="bg-dark-primary hover:bg-accent-hover text-white text-xs font-mono uppercase px-4 py-2 rounded transition-colors cursor-pointer">Save to Database</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="border-t border-dark-outline-variant py-4 px-6 text-center text-xs font-mono text-dark-on-surface-variant">
+    Protected by Supabase Row Level Security (RLS) & Auth.
+  </footer>
+
+  <script type="module">
+    import { SUPABASE_URL, SUPABASE_ANON_KEY } from './supabase-client.js';
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Elements
+    const loginContainer = document.getElementById('login-container');
+    const dashboardContainer = document.getElementById('dashboard-container');
+    const loginForm = document.getElementById('login-form');
+    const loginEmail = document.getElementById('login-email');
+    const loginPassword = document.getElementById('login-password');
+    const loginStatus = document.getElementById('login-status');
+    const loginSubmitBtn = document.getElementById('login-submit-btn');
+    const loginBtnText = document.getElementById('login-btn-text');
+    const loginBtnIcon = document.getElementById('login-btn-icon');
+    const logoutBtn = document.getElementById('logout-btn');
+    const adminUserBadge = document.getElementById('admin-user-badge');
+    const tabContent = document.getElementById('tab-content');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+
+    // Modal elements
+    const itemModal = document.getElementById('item-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalForm = document.getElementById('modal-form');
+    const modalFields = document.getElementById('modal-fields');
+    const modalStatus = document.getElementById('modal-status');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const modalCancelBtn = document.getElementById('modal-cancel-btn');
+    const modalSaveBtn = document.getElementById('modal-save-btn');
+    const feedbackMessage = document.getElementById('feedback-message');
+
+    let currentTab = 'projects';
+    let currentUser = null;
+    let editingItemId = null;
+    let currentTabItems = [];
+
+    // Utility: HTML escape helper for input values
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    // Feedback Notification Banner
+    function showFeedback(message, type = 'success') {
+      if (!feedbackMessage) return;
+      feedbackMessage.className = type === 'success'
+        ? 'mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs flex items-center justify-between gap-2 shadow-sm'
+        : 'mb-4 p-3 rounded-lg bg-accent/10 border border-accent/20 text-accent-text font-mono text-xs flex items-center justify-between gap-2 shadow-sm';
+      feedbackMessage.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">${type === 'success' ? 'check_circle' : 'error'}</span>
+          <span>${message}</span>
+        </div>
+        <button id="close-feedback-btn" class="hover:opacity-75 cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      `;
+      feedbackMessage.classList.remove('hidden');
+      document.getElementById('close-feedback-btn')?.addEventListener('click', () => {
+        feedbackMessage.classList.add('hidden');
+      });
+      setTimeout(() => {
+        feedbackMessage.classList.add('hidden');
+      }, 4000);
+    }
+
+    // Check Active Session
+    async function checkSession() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session && session.user) {
+        currentUser = session.user;
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    }
+
+    function showLogin() {
+      loginContainer.classList.remove('hidden');
+      dashboardContainer.classList.add('hidden');
+      logoutBtn.classList.add('hidden');
+    }
+
+    function showDashboard() {
+      loginContainer.classList.add('hidden');
+      dashboardContainer.classList.remove('hidden');
+      logoutBtn.classList.remove('hidden');
+      adminUserBadge.textContent = currentUser?.email || 'Admin';
+      loadTab(currentTab);
+    }
+
+    // Login Form Submission
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginStatus.textContent = '';
+      loginSubmitBtn.disabled = true;
+      loginBtnText.textContent = 'Verifying...';
+      loginBtnIcon.classList.add('animate-spin');
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: loginEmail.value.trim(),
+          password: loginPassword.value
+        });
+
+        if (error) throw error;
+
+        currentUser = data.user;
+        showDashboard();
+      } catch (err) {
+        loginStatus.textContent = err.message || 'Authentication failed. Please verify credentials.';
+      } finally {
+        loginSubmitBtn.disabled = false;
+        loginBtnText.textContent = 'Authenticate';
+        loginBtnIcon.classList.remove('animate-spin');
+      }
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      currentUser = null;
+      showLogin();
+    });
+
+    // Listen to Auth State Changes
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || !session) {
+        showLogin();
+      } else if (session?.user) {
+        currentUser = session.user;
+        showDashboard();
+      }
+    });
+
+    // Tabs Navigation
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => {
+          b.classList.remove('active', 'border-accent', 'text-accent-text');
+          b.classList.add('border-transparent', 'text-dark-on-surface-variant');
+        });
+        btn.classList.add('active', 'border-accent', 'text-accent-text');
+        btn.classList.remove('border-transparent', 'text-dark-on-surface-variant');
+        currentTab = btn.dataset.tab;
+        loadTab(currentTab);
+      });
+    });
+
+    // Load Tab Records
+    async function loadTab(tab) {
+      tabContent.innerHTML = `
+        <div class="flex items-center justify-center p-12 text-dark-on-surface-variant gap-2">
+          <span class="material-symbols-outlined animate-spin text-[20px]">sync</span>
+          <span class="font-mono text-sm">Loading ${tab}...</span>
+        </div>
+      `;
+
+      try {
+        const { data, error } = await supabase
+          .from(tab)
+          .select('*')
+          .order('display_order', { ascending: true });
+
+        if (error) throw error;
+        renderTab(tab, data || []);
+      } catch (err) {
+        tabContent.innerHTML = `
+          <div class="bg-accent/10 border border-accent/20 rounded-lg p-6 text-accent-text flex items-center gap-3">
+            <span class="material-symbols-outlined text-[24px]">error</span>
+            <div>
+              <p class="font-semibold text-sm">Failed to load ${tab}</p>
+              <p class="text-xs text-dark-on-surface-variant">${err.message}</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Render Tab View
+    function renderTab(tab, items) {
+      currentTabItems = items || [];
+      let html = `
+        <div class="flex justify-between items-center mb-6">
+          <span class="font-mono text-xs text-dark-on-surface-variant uppercase">${currentTabItems.length} ${tab} in database</span>
+          <button id="add-btn" class="bg-dark-primary hover:bg-accent-hover text-white text-xs font-mono uppercase px-3 py-2 rounded flex items-center gap-1.5 transition-colors cursor-pointer">
+            <span class="material-symbols-outlined text-[16px]">add</span>
+            <span>Add New</span>
+          </button>
+        </div>
+      `;
+
+      if (currentTabItems.length === 0) {
+        html += `
+          <div class="bg-dark-surface-container border border-dark-outline-variant rounded-lg p-12 text-center text-dark-on-surface-variant">
+            <span class="material-symbols-outlined text-4xl mb-2 text-dark-outline">inbox</span>
+            <p class="text-sm">No ${tab} found in the database.</p>
+          </div>
+        `;
+      } else {
+        html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+        currentTabItems.forEach(item => {
+          html += `
+            <div class="bg-dark-surface-container border border-dark-outline-variant rounded-lg p-5 flex flex-col justify-between gap-4 hover:border-dark-outline transition-colors">
+              <div class="flex flex-col gap-2">
+                <div class="flex justify-between items-start gap-2">
+                  <span class="font-mono text-xs text-accent-text uppercase">${escapeHtml(item.category || item.badge_label || item.graduation_year || 'Entry')}</span>
+                  <span class="font-mono text-xs text-dark-on-surface-variant">#${item.display_order ?? 0}</span>
+                </div>
+                <h3 class="font-semibold text-dark-on-surface text-base">${escapeHtml(item.title || item.name || item.degree || 'Untitled')}</h3>
+                <p class="text-xs text-dark-on-surface-variant line-clamp-2">${escapeHtml(item.description || item.institution || (item.tech_stack ? item.tech_stack.join(', ') : ''))}</p>
+              </div>
+              <div class="flex items-center justify-end gap-2 pt-3 border-t border-dark-outline-variant">
+                <button data-action="edit" data-id="${item.id}" class="text-xs text-dark-on-surface-variant hover:text-dark-on-surface font-mono px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer transition-colors border border-dark-outline-variant hover:border-dark-outline">
+                  <span class="material-symbols-outlined text-[16px]">edit</span>
+                  <span>Edit</span>
+                </button>
+                <button data-action="delete" data-id="${item.id}" class="text-xs text-accent-text hover:text-accent-hover font-mono px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer transition-colors">
+                  <span class="material-symbols-outlined text-[16px]">delete</span>
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+      }
+
+      tabContent.innerHTML = html;
+
+      // Add New Button Listener
+      const addBtn = document.getElementById('add-btn');
+      if (addBtn) {
+        addBtn.addEventListener('click', () => openModal(tab, null));
+      }
+
+      // Attach Edit Listeners
+      tabContent.querySelectorAll('[data-action="edit"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const item = currentTabItems.find(it => String(it.id) === String(id));
+          if (item) {
+            openModal(tab, item);
+          }
+        });
+      });
+
+      // Attach Delete Listeners
+      tabContent.querySelectorAll('[data-action="delete"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          if (confirm('Are you sure you want to delete this record?')) {
+            const { error } = await supabase.from(tab).delete().eq('id', id);
+            if (error) {
+              showFeedback('Error deleting: ' + error.message, 'error');
+            } else {
+              await loadTab(tab);
+              showFeedback('Record deleted successfully.');
+            }
+          }
+        });
+      });
+    }
+
+    // Modal Builder (Handles both Create and Edit)
+    function openModal(tab, item = null) {
+      editingItemId = item ? item.id : null;
+      const singularName = tab.slice(0, -1).toUpperCase();
+      modalTitle.textContent = item ? `Edit ${singularName}` : `Add New ${singularName}`;
+      modalSaveBtn.textContent = item ? 'Update Record' : 'Save to Database';
+      modalStatus.textContent = '';
+      let fieldsHtml = '';
+
+      if (tab === 'projects') {
+        fieldsHtml = `
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Title *
+            <input type="text" name="title" value="${item ? escapeHtml(item.title) : ''}" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Category *
+            <input type="text" name="category" value="${item ? escapeHtml(item.category) : ''}" placeholder="Sustainability / Productivity / Data & Backend" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Description *
+            <textarea name="description" rows="3" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">${item ? escapeHtml(item.description) : ''}</textarea>
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Tech Stack (comma separated) *
+            <input type="text" name="tech_stack" value="${item && item.tech_stack ? escapeHtml(Array.isArray(item.tech_stack) ? item.tech_stack.join(', ') : item.tech_stack) : ''}" placeholder="Flutter, React, FastAPI, Supabase" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Footer Tag
+              <input type="text" name="footer_tag" value="${item ? escapeHtml(item.footer_tag || '') : ''}" placeholder="Dart · SQLite" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Display Order
+              <input type="number" name="display_order" value="${item ? (item.display_order ?? 1) : 1}" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Link URL
+              <input type="text" name="link_url" value="${item ? escapeHtml(item.link_url || '#contact') : '#contact'}" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Material Icon
+              <input type="text" name="icon" value="${item ? escapeHtml(item.icon || 'code') : 'code'}" placeholder="code, recycling, dashboard, ev_station" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+          </div>
+        `;
+      } else if (tab === 'skills') {
+        fieldsHtml = `
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Category *
+            <input type="text" name="category" value="${item ? escapeHtml(item.category) : ''}" placeholder="Programming Languages / Web Development" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Skill Name *
+            <input type="text" name="name" value="${item ? escapeHtml(item.name) : ''}" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <div class="grid grid-cols-2 gap-2 mt-1">
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Material Icon
+              <input type="text" name="icon" value="${item ? escapeHtml(item.icon || 'code') : 'code'}" placeholder="code, language, terminal, memory" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Display Order
+              <input type="number" name="display_order" value="${item ? (item.display_order ?? 1) : 1}" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+          </div>
+          <label class="flex items-center gap-2 text-xs font-mono uppercase text-dark-on-surface-variant mt-2 cursor-pointer">
+            <input type="checkbox" name="is_highlighted" ${item && item.is_highlighted ? 'checked' : ''} class="rounded bg-dark-surface-container-low border-dark-outline-variant text-accent focus:ring-accent">
+            <span>Highlight with Accent Style</span>
+          </label>
+        `;
+      } else if (tab === 'education') {
+        fieldsHtml = `
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Degree *
+            <input type="text" name="degree" value="${item ? escapeHtml(item.degree) : ''}" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Institution *
+            <input type="text" name="institution" value="${item ? escapeHtml(item.institution) : 'Easwari Engineering College, Chennai'}" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Graduation Year *
+              <input type="text" name="graduation_year" value="${item ? escapeHtml(item.graduation_year) : '2029'}" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">CGPA
+              <input type="text" name="cgpa" value="${item ? escapeHtml(item.cgpa || '') : '9.52'}" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Location
+              <input type="text" name="location" value="${item ? escapeHtml(item.location || '') : 'Chennai, Tamil Nadu'}" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Display Order
+              <input type="number" name="display_order" value="${item ? (item.display_order ?? 1) : 1}" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+          </div>
+        `;
+      } else if (tab === 'certifications') {
+        fieldsHtml = `
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Title *
+            <input type="text" name="title" value="${item ? escapeHtml(item.title) : ''}" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Badge Label *
+            <input type="text" name="badge_label" value="${item ? escapeHtml(item.badge_label) : ''}" placeholder="Elite + Silver · 82%" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Description *
+            <textarea name="description" rows="3" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">${item ? escapeHtml(item.description) : ''}</textarea>
+          </label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Issuer
+              <input type="text" name="issuer" value="${item ? escapeHtml(item.issuer || 'NPTEL') : 'NPTEL'}" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+            <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Display Order
+              <input type="number" name="display_order" value="${item ? (item.display_order ?? 1) : 1}" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+            </label>
+          </div>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Credential URL
+            <input type="url" name="credential_url" value="${item ? escapeHtml(item.credential_url || '') : ''}" placeholder="https://..." class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+        `;
+      } else if (tab === 'achievements') {
+        fieldsHtml = `
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Title *
+            <input type="text" name="title" value="${item ? escapeHtml(item.title) : ''}" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Badge Label *
+            <input type="text" name="badge_label" value="${item ? escapeHtml(item.badge_label) : ''}" placeholder="30 Days Challenge" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Description *
+            <textarea name="description" rows="3" required class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">${item ? escapeHtml(item.description) : ''}</textarea>
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-mono uppercase text-dark-on-surface-variant">Display Order
+            <input type="number" name="display_order" value="${item ? (item.display_order ?? 1) : 1}" class="w-full bg-dark-surface-container-low border border-dark-outline-variant focus:border-accent focus:ring-1 focus:ring-accent rounded p-2 text-dark-on-surface text-sm transition-colors">
+          </label>
+        `;
+      }
+
+      modalFields.innerHTML = fieldsHtml;
+      itemModal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      itemModal.classList.add('hidden');
+      modalForm.reset();
+      editingItemId = null;
+      modalStatus.textContent = '';
+    }
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalCancelBtn.addEventListener('click', closeModal);
+
+    modalForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      modalStatus.textContent = '';
+      modalSaveBtn.disabled = true;
+      const originalBtnText = modalSaveBtn.textContent;
+      modalSaveBtn.textContent = editingItemId ? 'Updating...' : 'Saving...';
+
+      const formData = new FormData(modalForm);
+      const payload = {};
+
+      for (let [k, v] of formData.entries()) {
+        if (k === 'tech_stack') {
+          payload[k] = v.split(',').map(s => s.trim()).filter(Boolean);
+        } else if (k === 'is_highlighted') {
+          payload[k] = true;
+        } else if (k === 'display_order') {
+          payload[k] = parseInt(v, 10) || 0;
+        } else {
+          payload[k] = v.trim();
+        }
+      }
+
+      if (currentTab === 'skills' && !payload.is_highlighted) {
+        payload.is_highlighted = false;
+      }
+
+      try {
+        let resultError = null;
+
+        if (editingItemId) {
+          // Perform UPDATE on the existing record by ID
+          const { error } = await supabase
+            .from(currentTab)
+            .update(payload)
+            .eq('id', editingItemId);
+          resultError = error;
+        } else {
+          // Perform INSERT for a new record
+          const { error } = await supabase
+            .from(currentTab)
+            .insert(payload);
+          resultError = error;
+        }
+
+        if (resultError) throw resultError;
+
+        const actionText = editingItemId ? `Record updated successfully in ${currentTab}.` : `New record added to ${currentTab}.`;
+        closeModal();
+        await loadTab(currentTab);
+        showFeedback(actionText);
+      } catch (err) {
+        modalStatus.textContent = err.message || 'Operation failed. Please check inputs.';
+      } finally {
+        modalSaveBtn.disabled = false;
+        modalSaveBtn.textContent = originalBtnText;
+      }
+    });
+
+    // Initialize
+    checkSession();
+  </script>
+</body>
+</html>
